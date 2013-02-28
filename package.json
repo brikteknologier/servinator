@@ -1,0 +1,22 @@
+{
+  "name": "servinator",
+  "version": "0.1.0",
+  "description": "Starts a server with a config",
+  "main": "server.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://www.github.com/brikteknologier/servinator"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "optimist": "~0.3.5"
+  },
+  "devDependencies": {
+    "mocha": "~1.8.1"
+  }
+}
