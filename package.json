@@ -4,8 +4,7 @@
   "description": "Starts a server with a config",
   "main": "server.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha",
-    "start": "node server.js"
+    "test": "./node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",
