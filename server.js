@@ -1,18 +1,23 @@
 var fs = require('fs'),
     argv = require('optimist').argv;
 
-var transcoderConfigFile = argv.transcoder || process.env.LAMBIC_TRANSCODER;
+module.exports = function servinator(server, configArgName, envVarName) {
+  configArgName = configArgName || 'config';
+  envVarName = envVarName || 'CONFIG_FILE';
 
-if (!transcoderConfigFile) {
-  throw new Error("No transcoder specified! Use the --transcoder flag or " +
-                  "the LAMBIC_TRANSCODER environment variable to specify a " +
-                  "configuration file");
-} else if (!fs.existsSync(transcoderConfigFile)) {
-  throw new Error("Transcoder config file '" + transcoderConfigFile + "' " +
-                  "doesn't actually exist. That's not very nice. Please give " +
-                  "me a config which does exist.");
-}
+  var configFile = argv[configArgName] || process.env[envVarName];
 
-var transcoderConfig = JSON.parse(fs.readFileSync(transcoderConfigFile));
-require('./')(transcoderConfig).listen(transcoderConfig.port);
+  if (!configFile) {
+    throw new Error("No configuration specified! Use the --" + configArgName +
+                    " flag or the " + envVarName + " environment variable to " +
+                    " specify a configuration file");
+  } else if (!fs.existsSync(configFile)) {
+    throw new Error("Transcoder config file '" + configFile + "' " +
+                    "doesn't actually exist. That's not very nice. Please give " +
+                    "me a config which does exist.");
+  }
+
+  var config = JSON.parse(fs.readFileSync(configFile));
+  return server(config).listen(config.port);
+};
 
