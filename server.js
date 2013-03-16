@@ -18,6 +18,13 @@ module.exports = function servinator(server, configArgName, envVarName) {
   }
 
   var config = JSON.parse(fs.readFileSync(configFile));
-  return server(config).listen(config.port);
+  if (server.length == 2) {
+    server(config, function(err, app) {
+      if (err) throw err;
+      app.listen(config.port);
+    });
+  } else {
+    return server(config).listen(config.port);
+  }
 };
 
