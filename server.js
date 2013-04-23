@@ -1,5 +1,5 @@
-var fs = require('fs'),
-    argv = require('optimist').argv;
+var fs = require('fs');
+var argv = require('optimist').argv;
 
 module.exports = function servinator(server, configArgName, envVarName) {
   configArgName = configArgName || 'config';
@@ -8,19 +8,26 @@ module.exports = function servinator(server, configArgName, envVarName) {
   var configFile = argv[configArgName] || process.env[envVarName];
 
   if (!configFile) {
-    throw new Error("No configuration specified! Use the --" + configArgName +
-                    " flag or the " + envVarName + " environment variable to " +
-                    " specify a configuration file");
+    process.stderr.write(
+      "No configuration specified! Use the --" + configArgName + " " +
+      "flag or the " + envVarName + " environment variable to " +
+      "specify a configuration file\n");
+    process.exit(1);
   } else if (!fs.existsSync(configFile)) {
-    throw new Error("Transcoder config file '" + configFile + "' " +
-                    "doesn't actually exist. That's not very nice. Please give " +
-                    "me a config which does exist.");
+    process.stderr.write(
+      "Transcoder config file '" + configFile + "' " +
+      "doesn't actually exist. That's not very nice. Please give " +
+      "me a config which does exist.\n");
+    process.exit(1);
   }
 
   var config = JSON.parse(fs.readFileSync(configFile));
   if (server.length == 2) {
     server(config, function(err, app) {
-      if (err) throw err;
+      if (err) {
+        process.stderr.write(err + "\n");
+        process.exit(1);
+      }
       app.listen(config.port);
     });
   } else {
