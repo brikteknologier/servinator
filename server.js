@@ -22,7 +22,7 @@ module.exports = function servinator(server, configArgName, envVarName) {
   }
 
   var config = JSON.parse(fs.readFileSync(configFile));
-  if (typeof config.port != null) {
+  if (config.port === undefined) {
     process.stderr.write("Configuration must have a key 'port' with a " +
       "numerical value, specifying the TCP port the server should listen on\n");
     process.exit(1);
