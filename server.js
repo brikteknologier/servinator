@@ -15,7 +15,7 @@ module.exports = function servinator(server, configArgName, envVarName) {
     process.exit(1);
   } else if (!fs.existsSync(configFile)) {
     process.stderr.write(
-      "Transcoder config file '" + configFile + "' " +
+      "Config file '" + configFile + "' " +
       "doesn't actually exist. That's not very nice. Please give " +
       "me a config which does exist.\n");
     process.exit(1);
