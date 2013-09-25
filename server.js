@@ -28,16 +28,20 @@ module.exports = function servinator(server, configArgName, envVarName) {
     process.exit(1);
   }
 
+  var httpServer = new http.Server();
   if (server.length == 2) {
     server(config, function(err, app) {
       if (err) {
         process.stderr.write(err + "\n");
         process.exit(1);
       }
+      httpServer.on('request', app);
       app.listen(config.port);
     });
   } else {
-    return server(config).listen(config.port);
+    httpServer.on('request', server(config));
+    httpServer.listen(config.port);
   }
+  return httpServer;
 };
 
